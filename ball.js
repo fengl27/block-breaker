@@ -66,12 +66,14 @@ const ballTypes = {
     },
     virus: {
         display: function() {
+            if(!this.dispRotation) {
+                this.dispRotation = 0;
+            }
+            this.dispRotation += Math.sign(this.vel.x) / 8;
             ctx.save();
             ctx.translate(this.pos.x, this.pos.y);
-            //ctx.rotate(Math.atan2(this.vel.y, this.vel.x));
-            //ctx.scale(1.2, 1);
+            ctx.rotate(this.dispRotation);
             ctx.beginPath();
-            
             displayBall(this.type, 0, 0, Ball.BALL_SIZE);
             //circle(ctx, 0, 0, Ball.BALL_SIZE);
             ctx.fill();
@@ -518,6 +520,6 @@ var spawnBalls = function() {
     var ballSpacing = Math.min(2.5 * Ball.BALL_SIZE, canvas.width / equip.length / 5);
     var ballStartX = canvas.width / 2 - ballSpacing * (equip.length - 1) / 2;
     for(var i = 0; i < equip.length; i ++) {
-        balls.push(new Ball(new Vect(4.49432+ballStartX + i * ballSpacing, canvas.height / 3), equip[i][0], equip[i][1]));
+        balls.push(new Ball(new Vect(ballStartX + i * ballSpacing, canvas.height / 3), equip[i][0], equip[i][1]));
     }
 }
