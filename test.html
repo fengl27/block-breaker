@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>blork breaker</title>
+        <style>
+            body {
+                overflow: hidden;
+                position: relative;
+                margin: 0px;
+                padding: 0px;
+                height: 100vh;
+                
+                background-image: linear-gradient(
+                    45deg,
+                    rgb(31, 31, 61),
+                    rgb(74, 74, 119),
+                    rgb(31, 31, 61)
+                );
+                
+                /*background-color: black;*/
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 1em;
+            }
+
+            #canvas {
+                background-color: rgb(48, 48, 48);
+                aspect-ratio: 1;
+            }
+
+            #canvas {
+                height: calc(100vh - 20px);
+                border: 1px solid black;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id = "canvas"></canvas>
+    </body>
+    <script src = "vect.js"></script>
+    <script src = "init.js"></script>
+    <script src = "utils.js"></script>
+    <script src = "button.js"></script>
+    <script src = "particle.js"></script>
+    <script src = "screenshake.js"></script>
+    <script src = "paddle.js"></script>
+    <script src = "bad.js"></script>
+    <script src = "brick.js"></script>
+    <script src = "ball.js"></script>
+    <script src = "upgrade.js"></script>
+
+    <script src = "game.js"></script>
+
+    <script src = "test.js"></script>
+</html>
