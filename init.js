@@ -25,7 +25,7 @@ const settings = {
     DT: 4,//4 updates per update
 
     //paddle stuff
-    paddleSize: new Vect(canvas.height / 5, canvas.height / 40),
+    paddleSize: new Vect(canvas.height / 5, canvas.height / 30),
     paddleAcc: h100 * 0.8,
     paddleFric: 0.7,//friction
     
@@ -48,6 +48,7 @@ var paused = false;
 //assets lol
 var assets = {
     brick: "red-brick.png",
+    brickOutline: "brick-outline.png",
     balls: "kais-balls.png",
     paddle: "paddle.png"
 };

@@ -19,8 +19,9 @@ var paddle = {
     },
     
     display: function() {
-        ctx.fillStyle = this.col;
-        ctx.fillRect(this.pos.x, this.pos.y, this.size.x, this.size.y);
+        ctx.drawImage(assets.paddle, this.pos.x, this.pos.y, this.size.x, this.size.y);
+        //ctx.fillStyle = this.col;
+        //ctx.fillRect(this.pos.x, this.pos.y, this.size.x, this.size.y);
     },
     update: function() {
         if(this.speedMultDuration > 0) {

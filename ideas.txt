@@ -5,3 +5,15 @@
 :) FIX WEAKENING SPREADINGING
 
 fsr weaken synergises really well with normie and ghost
+
+
+
+HOW TO GIT:
+uhhh
+
+git add -A
+git commit -m "message"
+git push origin main
+
+if errors:
+    be sad()

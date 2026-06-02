@@ -148,18 +148,20 @@ class Brick {
         }
         if(!this.nextEffects.length && this.effects.onFire) this.effects.onFire=0;
         if(this.effects.onFire !== 40 && this.effects.onFire > 10) {
-            
+            /*
             ctx.strokeStyle = "rgb(255, 25, 0)";
             ctx.lineWidth = h100 / 2;
             ctx.strokeRect(this.pos.x, this.pos.y, Brick.BRICK_SIZE.x, Brick.BRICK_SIZE.y);
-            
+            */
             this.tint = [255, 0, 0, 0.5];
         }
         else if(this.effects.dmgMult > 1) {
+            /*
             ctx.strokeStyle = "rgb(14, 150, 30)";
             ctx.lineWidth = h100 / 2;
             ctx.strokeRect(this.pos.x, this.pos.y, Brick.BRICK_SIZE.x, Brick.BRICK_SIZE.y);
-            this.tint = [80, 14, 150, 0.2];
+            */
+            this.tint = [14, 150, 30, 0.2];
             if(Math.random() < 0.1) {
                 Particle.AABBParticles(
                     1, (x, y, o) => {
@@ -178,18 +180,27 @@ class Brick {
         */
         var brickCol = getBrickCol(this.health);
         var dispRect = [this.pos.x + m, this.pos.y + m, Brick.BRICK_SIZE.x - 2 * m, Brick.BRICK_SIZE.y - 2 * m];
-        // Draw original image
-
-        //ctx.drawImage(assets.brick, ...dispRect);
-        drawImgWithHue(assets.brick, brickCol.h*360, dispRect);
+        
+        
+        // Draw image with tint
+        drawImgWithHue(assets.brick, brickCol.h*360, dispRect, );
 
         //tint
-        ctx.fillStyle = "rgba(" + this.tint.join(", ") + ")";
+        ctx.fillStyle = `rgba(${this.tint.join(", ")})`;
+        ctx.globalCompositeOperation = "source-atop";
         ctx.fillRect(...dispRect);
+        ctx.globalCompositeOperation = "source-over";
 
-        //sat tint
+        //sat tint (darkens slightly randomly)
         ctx.fillStyle = "rgba(0,0,0," + this.saturationTint + ")";
         ctx.fillRect(...dispRect);
+
+        //draw outline normally
+        ctx.drawImage(assets.brickOutline, ...dispRect);
+        //tint the outline with desired tint
+        drawImgWithCol(assets.brickOutline, `rgba(${this.tint[0]}, ${this.tint[1]}, ${this.tint[2]}, ${Math.min(this.tint[3]*3,1)})`, dispRect);
+
+
         //ctx.rect(this.pos.x + m, this.pos.y + m, Brick.BRICK_SIZE.x - 2 * m, Brick.BRICK_SIZE.y - 2 * m);
 
         this.tint[3] *= 0.95;

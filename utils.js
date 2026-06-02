@@ -152,8 +152,8 @@ function drawImgWithHue(img, hue, rect) {//rect is an array with x,y,w,h
     bctx.globalCompositeOperation = 'source-atop';
     bctx.fillStyle = `hsl(${hue}, 100%, 50%)`; // Target hue
     bctx.fillRect(0, 0, rect[2], rect[3]);
-    
-    // 3. Clip the result back to the original image shape
+
+    //do shenanigans to make it like the same luminosity-ish
     bctx.globalCompositeOperation = 'luminosity';
     bctx.drawImage(img, 0, 0, rect[2], rect[3]);
     
@@ -164,7 +164,22 @@ function drawImgWithHue(img, hue, rect) {//rect is an array with x,y,w,h
     
     bctx.globalCompositeOperation = 'destination-in';
     bctx.drawImage(img, 0, 0, rect[2], rect[3]);
+    ctx.drawImage(bob, rect[0], rect[1]);
+}
+function drawImgWithCol(img, col, rect) {
+    var bob = new OffscreenCanvas(rect[2], rect[3]);
+    var bctx = bob.getContext("2d");
+    bctx.imageSmoothingEnabled = false;//make my sad pixel art less sad (it still suck)
+    
+    //draw img
+    bctx.drawImage(img, 0, 0, rect[2], rect[3]);
 
+    //use source-atop to set wherever the image exists to col (and delete original)
+    bctx.globalCompositeOperation = "source-in";
+    bctx.fillStyle = col; // Target hue
+    bctx.fillRect(0, 0, rect[2], rect[3]);
+    
+    //draw onto canvas at wanted position
     ctx.drawImage(bob, rect[0], rect[1]);
 }
 
