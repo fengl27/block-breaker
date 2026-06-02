@@ -140,7 +140,7 @@ function lerpHsv(color1, color2, t) {//hsv goes from 0-1 because funny
     return {h, s, v};
 }
 
-function drawImgWithHue(img, hue, rect) {//rect is an array with x,y,w,h
+function drawImgWithHue(img, hue, rect, shouldReturn) {//rect is an array with x,y,w,h
     var bob = new OffscreenCanvas(rect[2], rect[3]);
     var bctx = bob.getContext("2d");
     bctx.imageSmoothingEnabled = false;//make my sad pixel art less sad (it still suck)
@@ -164,7 +164,13 @@ function drawImgWithHue(img, hue, rect) {//rect is an array with x,y,w,h
     
     bctx.globalCompositeOperation = 'destination-in';
     bctx.drawImage(img, 0, 0, rect[2], rect[3]);
-    ctx.drawImage(bob, rect[0], rect[1]);
+
+    if(shouldReturn) {
+        return [bob, bctx];
+    }
+    else {
+        ctx.drawImage(bob, rect[0], rect[1]);
+    }
 }
 function drawImgWithCol(img, col, rect) {
     var bob = new OffscreenCanvas(rect[2], rect[3]);

@@ -183,18 +183,20 @@ class Brick {
         
         
         // Draw image with tint
-        drawImgWithHue(assets.brick, brickCol.h*360, dispRect, );
-
+        var [bob, bctx] = drawImgWithHue(assets.brick, brickCol.h*360, dispRect, true);
         //tint
-        ctx.fillStyle = `rgba(${this.tint.join(", ")})`;
-        ctx.globalCompositeOperation = "source-atop";
-        ctx.fillRect(...dispRect);
-        ctx.globalCompositeOperation = "source-over";
+        bctx.fillStyle = `rgba(${this.tint.join(", ")})`;
+        bctx.globalCompositeOperation = "source-atop";
+        bctx.fillRect(...dispRect);
+
+        ctx.drawImage(bob, dispRect[0], dispRect[1]);
 
         //sat tint (darkens slightly randomly)
         ctx.fillStyle = "rgba(0,0,0," + this.saturationTint + ")";
         ctx.fillRect(...dispRect);
 
+        var epsilon = 0.00001;
+        dispRect[0]-=epsilon; dispRect[1]-=epsilon; dispRect[2]+=2*epsilon; dispRect[3]+=2*epsilon;
         //draw outline normally
         ctx.drawImage(assets.brickOutline, ...dispRect);
         //tint the outline with desired tint
