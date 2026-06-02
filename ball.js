@@ -134,10 +134,18 @@ const ballTypes = {
             ctx.rotate(Math.atan2(this.vel.y, this.vel.x) + Math.PI / 2);
             ctx.beginPath();
             
-            displayBall(this.type, 0, 0, Ball.BALL_SIZE);
+            displayBall(this.vel.y < 0? "angry-ghost": this.type, 0, 0, Ball.BALL_SIZE);
             //circle(ctx, 0, 0, Ball.BALL_SIZE);
             ctx.fill();
             ctx.restore();
+            if(this.vel.y < 0) {
+                ctx.fillStyle = "rgba(170, 49, 49, 0.05)";
+                for(var i = 1; i < 2.5; i += 0.3) {
+                    ctx.beginPath();
+                    ctx.arc(this.pos.x, this.pos.y, Ball.BALL_SIZE * i, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
         },
         bonk: function(brick, ball, level) {
             if(ball.vel.y < 0 && brick.health > 1) {
@@ -159,12 +167,14 @@ const ballTypes = {
 
         update: function() {
             if(this.vel.y < 0) {
+                /*
                 ctx.fillStyle = "rgba(255, 100, 100, 0.1)";
                 for(var i = 1; i < 3; i += 0.2) {
                     ctx.beginPath();
                     ctx.arc(this.pos.x, this.pos.y, Ball.BALL_SIZE * i, 0, Math.PI * 2);
                     ctx.fill();
                 }
+                */
                 this.speedMult = 1.3;
             }
             else {
@@ -334,8 +344,9 @@ class Ball {
     doSpawnAnim() {
         var size = easings.easeInQuart(this.spawnAnimTimer);
         
-        ctx.fillStyle = `rgba(255, 255, 255, ${size})`;
-        circle(ctx, this.pos.x, this.pos.y, size * Ball.BALL_SIZE);
+        //ctx.fillStyle = `rgba(255, 255, 255, ${size})`;
+        displayBall(this.type, this.pos.x, this.pos.y, size * Ball.BALL_SIZE);
+        //circle(ctx, this.pos.x, this.pos.y, size * Ball.BALL_SIZE);
         ctx.fill();
     }
 

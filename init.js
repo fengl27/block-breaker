@@ -49,6 +49,7 @@ var paused = false;
 var assets = {
     brick: "red-brick.png",
     balls: "kais-balls.png",
+    paddle: "paddle.png"
 };
 for(var i in assets) {
     let bob = new Image();

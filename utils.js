@@ -189,7 +189,7 @@ var triangle = function(ctx, x, y, x2, y2, x3, y3) {
 };
 var displayBall = function(type, x, y, size) {
     size *= 2;
-    ctx.drawImage(assets.balls, 8* ["fire", "virus", "barrier", "ghost", "weaken", "normal"].indexOf(type), 0, 8, 8, x-size/2, y-size/2, size, size);
+    ctx.drawImage(assets.balls, 8* ["fire", "virus", "barrier", "ghost", "weaken", "normal", "angry-ghost"].indexOf(type), 0, 8, 8, x-size/2, y-size/2, size, size);
 };
 var drawHeart = function(ctx, x, y, s) {
     ctx.fillStyle = "rgb(197, 51, 51)";
