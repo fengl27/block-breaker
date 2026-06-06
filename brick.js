@@ -128,6 +128,11 @@ class Brick {
             dmgMult: 1,//damage multiplier
         };
 
+        this.knockback = {//funny dopamine display effect
+            offset: new Vect(0, 0),
+            vel: new Vect(0, 0)
+        };
+
         this.tint = [0, 0, 0, 0];
         this.saturationTint = Math.random() * 0.2;
 
@@ -179,7 +184,7 @@ class Brick {
         //ctx.rect(this.pos.x + m, this.pos.y + m, Brick.BRICK_SIZE.x - 2 * m, Brick.BRICK_SIZE.y - 2 * m);
         */
         var brickCol = getBrickCol(this.health);
-        var dispRect = [this.pos.x + m, this.pos.y + m, Brick.BRICK_SIZE.x - 2 * m, Brick.BRICK_SIZE.y - 2 * m];
+        var dispRect = [this.pos.x + m + this.knockback.offset.x, this.pos.y + m + this.knockback.offset.y, Brick.BRICK_SIZE.x - 2 * m, Brick.BRICK_SIZE.y - 2 * m];
         
         
         // Draw image with tint
@@ -219,13 +224,18 @@ class Brick {
     }
 
     update() {
-        if(this.pos.y > canvas.height) {
+        if(this.pos.y > canvas.height - Brick.BRICK_SIZE.y) {
             //well then ya dead y'nkow??
             switchState("lose");
         }
+
+        //run kb effect
+        this.knockback.offset.add(this.knockback.vel);
+        this.knockback.vel.mult(0.85);
+        this.knockback.vel.add(Vect.div(this.knockback.offset, -20));
     }
 
-    damage(amount, noShake, noSound) {
+    damage(amount, noShake, noSound, damageOrigin) {
         amount = amount || 1;
         this.health -= amount * this.effects.dmgMult;
         if(!noShake) {
@@ -233,12 +243,24 @@ class Brick {
         }
         if(this.dead && !noSound) {
             soundEffects.kill.play();
+            return;
         }
+
+        //do knockback effect
+        var diff;
+        if(damageOrigin) {
+            diff = Vect.sub(this.center, damageOrigin);
+        }
+        else {
+            diff = new Vect(Math.random() - 0.5, Math.random() - 0.5);
+        }
+        diff.mult(amount * h100 / 2 / diff.mag());//scale based on dmg
+        this.knockback.vel.add(diff);
     }
 
     static runFire(dude, spread) {
         if(dude.effects.onFire === 40) {
-            dude.damage(1, true, true);//do 1 damage without shake because fire is pain
+            dude.damage(1, true, true, false);//do 1 damage without shake because fire is pain
             soundEffects.fire.play();
             if(spread > 0) {
                 var neighbors = Brick.findNeighbors(dude);

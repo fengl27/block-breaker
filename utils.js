@@ -191,10 +191,15 @@ function drawImgWithCol(img, col, rect) {
 
 //display functions
 var rect = function(ctx, x, y, w, h, fill, stroke) {
+    /*
     ctx.beginPath();
     ctx.rect(x, y, w, h);
     if(fill)    ctx.fill();
     if(stroke)  ctx.stroke();
+    ctx.closePath();
+    */
+    if(fill)     ctx.fillRect(x,y,w,h);
+    if(stroke) ctx.strokeRect(x,y,w,h);
 }
 var circle = function(ctx, x, y, s) {
     ctx.beginPath();

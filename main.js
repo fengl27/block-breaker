@@ -46,6 +46,7 @@ var mainMenu = {
         {b: new Button(h100 * 10, h100 * 30, h100 * 80, h100 * 10, "start >:)"), thing: () => switchState("playing")}
     ],
     go: function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "rgb(100, 100, 100";
         for(var i = 0; i < this.buttons.length; i ++) {
             this.buttons[i].b.go();
@@ -58,6 +59,11 @@ var mainMenu = {
 var lives = 3;
 //switchState("playing");
 var frame = function() {
+    ctx.fillStyle = "rgba(255,0,0,0.01)";
+    ctx.beginPath();
+    ctx.rect(0,0,1,1);
+    ctx.fill();
+    ctx.closePath();
 
     screenshake.update();
     canvas.style.transform = `translate(${screenshake.x}px, ${screenshake.y}px)`;
@@ -174,7 +180,9 @@ var frame = function() {
     mouse.justPressed = false;
     mouse.justReleased = false;
     stateSwitchTimer ++;
-    window.requestAnimationFrame(frame);
+    if(!keys.x) {
+        window.requestAnimationFrame(frame);
+    }
 };
 window.requestAnimationFrame(frame);
 /*

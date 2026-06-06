@@ -76,6 +76,11 @@ class Vect {
     normalize(){
         return this.div(this.mag());
     }
+    toNormalized() {
+        var mag = this.mag();
+        this.x /= mag;
+        this.y /= mag;
+    }
     sqrMag() {
         return this.x * this.x + this.y * this.y;
     }

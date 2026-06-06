@@ -18,7 +18,7 @@ const ballTypes = {
             brick.health /= brick.effects.dmgMult;
             var damage = Math.min(brick.health, Math.floor(ball.damageLeft));
             //console.log("do " + Math.max(1, damage)/brick.effects.dmgMult + " DAMAGE to brick with " + brick.health + " health");
-            brick.damage(Math.max(1, damage)/brick.effects.dmgMult, true);//do at least 1 damage
+            brick.damage(Math.max(1, damage)/brick.effects.dmgMult, true, false, ball.pos);//do at least 1 damage
             screenshake.shake(1, ball.vel.x, ball.vel.y);//shakescreen with cool directionality
             particles.push(new CircleParticle(ball.pos.x, ball.pos.y));
             Particle.spawnParticles(
@@ -153,7 +153,7 @@ const ballTypes = {
                     soundEffects.ghost.play();
                     particles.push(new CircleParticle(ball.pos.x, ball.pos.y));
                     ball.bricksHit.push(brick);
-                    brick.damage(Math.min(brick.health - 1, Math.pow(2, level-1)), true);
+                    brick.damage(Math.min(brick.health - 1, Math.pow(2, level-1)), true, ball.pos);
                     Particle.AABBParticles(
                         2,
                         (x, y, o) => {
@@ -200,7 +200,7 @@ const ballTypes = {
             ctx.restore();
         },
         bonk: function(brick, ball) {
-            brick.damage(1, true);//do 1 damage
+            brick.damage(1, true, false, ball.pos);//do 1 damage
             soundEffects.damage.play();
             screenshake.shake(1, ball.vel.x, ball.vel.y);//shakescreen with cool directionality
             particles.push(new CircleParticle(ball.pos.x, ball.pos.y));
@@ -280,7 +280,6 @@ const ballTypes = {
             ctx.restore();
         },
         bonk: function(brick, ball, level) {
-            //brick.damage(1, true);//do at least 1 damage
             brick.effects.dmgMult = Math.max(level+1, brick.effects.dmgMult);
             screenshake.shake(1, ball.vel.x, ball.vel.y);//shakescreen with cool directionality
             particles.push(new CircleParticle(ball.pos.x, ball.pos.y));

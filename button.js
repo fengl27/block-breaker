@@ -33,7 +33,7 @@ class Button {
     }
 
     go() {
-        ctx.strokeStyle = "black"
+        ctx.strokeStyle = "black";
         ctx.lineWidth = h100/2;
         var hovered = mouse.x > this.p.x &&
                 mouse.x < this.p.x+this.s.x &&
