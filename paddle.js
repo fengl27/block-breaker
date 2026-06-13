@@ -33,8 +33,13 @@ var paddle = {
 
         //this.col = interpolateColor(this.col, this.targetCol, 0.05);
 
-        this.vel.x += this.tempSpeedMult * this.ACC * (!!keys.d - !!keys.a);
+        let movement = !!keys.d-!!keys.a;
+
+        this.vel.x += this.tempSpeedMult * this.ACC * movement;
         this.vel.x *= this.FRIC;
+        if(!movement) {
+            this.vel.x *= 0.6;
+        }
         this.pos.x += this.vel.x;
 
         this.pos.x = Math.max(0, Math.min(canvas.width - this.size.x, this.pos.x));

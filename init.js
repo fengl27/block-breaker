@@ -26,8 +26,8 @@ const settings = {
 
     //paddle stuff
     paddleSize: new Vect(canvas.height / 5, canvas.height / 30),
-    paddleAcc: h100 * 0.8,
-    paddleFric: 0.7,//friction
+    paddleAcc: h100 * 0.3,
+    paddleFric: 0.9,//friction
     
     //other
     badSpeed: h100/2,
@@ -57,3 +57,29 @@ for(var i in assets) {
     bob.src = "assets/"+assets[i];
     assets[i] = bob;
 }
+
+const fonts = [
+    {path: "assets/bytebounce-font/ByteBounce.ttf", name: "pixelFont"},
+    {path: "assets/lowerpixel-font/LowresPixel-Regular.otf", name: "pixelFontSmall"}
+]
+
+async function loadFont() {
+    //font time
+    try {
+        // 1. Define the font face (Font Family Name, URL source)
+        for(var i = 0; i < fonts.length; i ++) {
+            let myFont = new FontFace(
+                fonts[i].name,
+                'url("' + fonts[i].path + '")'
+            );
+
+            let loadedFont = await myFont.load();
+            document.fonts.add(loadedFont);
+        }
+        console.log("yay font worked");
+    }
+    catch(error) {
+        console.error("uhhhh the fon't:" + error);
+    }
+};
+loadFont();

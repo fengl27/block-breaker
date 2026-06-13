@@ -39,15 +39,17 @@ var switchState = function(target) {
         case "lose":
             console.log("AHA YIOU GOT TO level " + (currLevel+1));
             break;
+        case "equip":
+            equipScreen.button.txt = "to Lv. " + (currLevel + 1) + "!";
+            break;
     }
 };
 var mainMenu = {
     buttons: [//button constructor (x,y,w,h,txt)
-        {b: new Button(h100 * 10, h100 * 30, h100 * 80, h100 * 10, "start >:)"), thing: () => switchState("playing")}
+        {b: new Button(h100 * 30, h100 * 30, h100 * 40, h100 * 10, "start >:)"), thing: () => switchState("playing")}
     ],
     go: function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "rgb(100, 100, 100";
         for(var i = 0; i < this.buttons.length; i ++) {
             this.buttons[i].b.go();
             if(this.buttons[i].b.pressed) {
@@ -56,18 +58,25 @@ var mainMenu = {
         }
     }
 };
+var loseButtons = {
+    equipButton: new Button(h100*25, h100 * 80, h100 * 50, h100 * 10, "try again!"),
+    menuButton: new Button(h100 *25, h100 * 80, h100 * 50, h100 * 10, "main menu")
+};
 var lives = 3;
 //switchState("playing");
 var frame = function() {
+    //fixes wierd canvas bug with uhhhhhhhhh wierd rectangles lingering
     ctx.fillStyle = "rgba(255,0,0,0.01)";
     ctx.beginPath();
     ctx.rect(0,0,1,1);
     ctx.fill();
     ctx.closePath();
 
+    //screenshake stuff
     screenshake.update();
     canvas.style.transform = `translate(${screenshake.x}px, ${screenshake.y}px)`;
     
+    //pause screen stuff
     if(justPressed["p"]) {
         paused = !paused;
     }
@@ -131,16 +140,17 @@ var frame = function() {
                 ctx.restore();
                 
                 //hearts for no reason
-                var t = limit(stateSwitchTimer / 30 - 5, 0, 1);
+                var t = limit((stateSwitchTimer-100) / 30, 0, 1);
                 ctx.globalAlpha = easings.easeInOutQuad(t);
                 for(var i = 0; i < lives; i ++) {
+                    //insane centering math
                     var x = canvas.width / 8 * (i - (lives-1)/2) + canvas.width / 2;
-                    if(i !== lives-1 || stateSwitchTimer < 190) {
+                    if(i !== lives-1 || stateSwitchTimer < 170) {
                         drawHeart(ctx, x, canvas.height / 2, h100/10);
                     }
                 }
                 ctx.globalAlpha = 1;
-                if(stateSwitchTimer === 190) {
+                if(stateSwitchTimer === 170) {
                     soundEffects.loseLife.play();
                     screenshake.shake(4);
                     Particle.spawnParticles(15, (x, y, o) => {Particle.squareParticle(x, y, 1, "255, 0, 0")}, x, canvas.height / 2);
@@ -149,14 +159,24 @@ var frame = function() {
                 //other text just like appears idk
                 var t2 = limit(stateSwitchTimer / 60 - 4, 0, 1);//just realized it's supposed to be called clamp
                 var opacity = easings.easeInOutQuad(t2);
+                ctx.globalAlpha = opacity;
+                /*
                 ctx.fillStyle = `rgba(150, 150, 150, ${opacity})`;
                 ctx.strokeStyle = `rgba(100, 100, 100, ${opacity})`;
                 ctx.strokeText("press space to yee", canvas.width / 2, canvas.height * 7/8);
                 ctx.fillText(  "press space to yes", canvas.width / 2, canvas.height * 7/8);
+                */
+                if(lives > 1) {
+                    loseButtons.equipButton.go();
+                }
+                else {
+                    loseButtons.menuButton.go();
+                }
+                ctx.globalAlpha = 1;
                 
                 Particle.runParticles();//do the particling
 
-                if(justPressed[" "]) {//sense for spaces
+                if(/*justPressed[" "]*/loseButtons.equipButton.pressed) {//press button
                     if(lives > 1) {
                         lives --;
                         switchState("equip");

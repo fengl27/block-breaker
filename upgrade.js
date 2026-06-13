@@ -4,7 +4,7 @@ var currPossibleUpgrades = [];
 var possibleUpgrades = [
     {
         name: '3 NORMAL ball get',
-        description: "normal",
+        description: "The most basic ball type.\n\nPierces through bricks at higher levels.",
         effect: function() {
             for(var i = 0; i < 3; i ++) {
                 inventory.push(["normal", 1]);
@@ -15,7 +15,7 @@ var possibleUpgrades = [
     },
     {
         name: 'VIRUS ball get',
-        description: "does big damage over longer time\nto one thing",
+        description: "does huge damage to one brick at a time.",
         effect: function(player) {
             inventory.push(["virus", 1]);
         },
@@ -24,7 +24,7 @@ var possibleUpgrades = [
     },
     {
         name: 'FIRE ball get',
-        description: "does one damage to a larger area",
+        description: "does one damage to a large area of bricks, spreading to bricks nearby.",
         effect: function(player) {
             inventory.push(["fire", 1]);
         },
@@ -33,7 +33,7 @@ var possibleUpgrades = [
     },
     {
         name: 'GHOST ball get',
-        description: "goes through stuff and damages\n of blocks when going through\nthem upwards\n\ncan't kill, it's a ghost >:)",
+        description: "Goes through blocks, damaging them as it moves upwards through them.\n\ncan't kill, it's a ghost",
         effect: function(player) {
             inventory.push(["ghost", 1]);
         },
@@ -42,7 +42,7 @@ var possibleUpgrades = [
     },
     {
         name: 'BARRIER ball get',
-        description: "makes shield that protects other\nballs that aren't barrier balls\n(will not protect itself you dunk)",
+        description: "makes shield that protects other balls that aren't barrier balls\n(will not protect itself you dunk)",
         effect: function(player) {
             inventory.push(["barrier", 1]);
         },
@@ -51,7 +51,7 @@ var possibleUpgrades = [
     },
     {
         name: 'WEaKEN ball get',
-        description: "will spread\nweakness, causing bricks to take\n2x damage!!!!!",
+        description: "will spread weakness across a large area, causing them to take twice the damage.\n\nWeakens more at higher levels.",
         effect: function(player) {
             inventory.push(["weaken", 1]);
         },
@@ -71,6 +71,7 @@ var possibleUpgrades = [
 ];
 var thingy = function(upgrades) {//loops through literally everything
     for(var i = 0; i < upgrades.length; i ++) {
+        upgrades[i].description = upgrades[i].description.split("\n").join(" \n ");//so that when i split by spaces it separates \n as its own word
         if(upgrades[i].branchThing === "self") {
             upgrades[i].branchThing = [upgrades[i]];
         }

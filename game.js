@@ -142,8 +142,11 @@ var upgradeScreen = function() {
     var margin = h100;
     var thingOffsetY = margin + 9*h100;
     var thingHeight = canvas.height - margin - thingOffsetY;
+
+    //Draw upgrade rectangles
     for(var i = 0; i < upgradeChoices.length; i ++) {
         var x = i * thingWidth;
+        //The rect part
         ctx.fillStyle = "rgb(100,100,100)";
         rect(
             ctx,
@@ -155,6 +158,7 @@ var upgradeScreen = function() {
             true
         );
         if(yTranslate !== 0) {
+            //transitions amirite
             rect(
                 ctx,
                 x + margin,
@@ -165,18 +169,31 @@ var upgradeScreen = function() {
                 true
             );
         }
+        //Struggle drawing text
         ctx.fillStyle = "rgb(255, 255, 255)";
-        ctx.font = 4*h100 + "px Tahoma";
+        ctx.font = 6*h100 + "px pixelFont";
         ctx.fillText(upgradeChoices[i].name, x + 2 * margin, thingOffsetY + margin + yTranslate, thingWidth - 4 * margin, thingHeight - 2 * margin);
-        ctx.font = 2*h100 + "px Tahoma";
-        var lines = upgradeChoices[i].description.split("\n");
-        for(var j = 0; j < lines.length; j ++) {
-            ctx.fillText(lines[j], x + 2 * margin, yTranslate + thingOffsetY + margin+4*h100+j*2*h100);
+        ctx.font = 2*h100 + "px pixelFontSmall";
+        var words = upgradeChoices[i].description.split(" ");
+        words.push("\n");//so that it displays the last line
+        var currLine = "";
+        var lineIdx = 0;
+        for(var j = 0; j < words.length; j ++) {
+            if(words[j] === "\n" || ctx.measureText(currLine + words[j]).width > thingWidth-4*margin) {
+                ctx.fillText(currLine, x + 2 * margin, yTranslate + thingOffsetY + margin+4*h100+lineIdx*2*h100);
+                currLine = "";
+                lineIdx ++;
+            }
+            if(words[j] !== "\n") {
+                currLine += words[j] + " ";
+            }
         }
+        //Buy detection
         if(upgradeScreen.buyTimer <= 0 && mouse.justPressed && IsPointInAABB(
             mouse,
             {x: x + margin, y: thingOffsetY},
             {x: thingWidth - 2 * margin, y: thingHeight})) {
+            //Purchase
             upgradeChoices[i].effect();
             soundEffects.purchase.play();
             
@@ -198,45 +215,41 @@ var upgradeScreen = function() {
     }
     //draw title thingy
     
-    ctx.fillStyle = "rgb(211, 211, 211)";
-    ctx.textAlign = "center";
 
-    ctx.font = 6*h100 + "px Tahoma";
-    ctx.strokeText("Choose an upgrade!", canvas.width / 2, h100 * 2);
+    ctx.textAlign = "center";
+    ctx.font = 10*h100 + "px pixelFont";
+
+    ctx.fillStyle = "black";
+    ctx.fillText  ("Choose an upgrade!", canvas.width / 2 + h100/5, h100 * 2 + h100/3);
+    ctx.fillStyle = "white";
     ctx.fillText  ("Choose an upgrade!", canvas.width / 2, h100 * 2);
 };
 upgradeScreen.buyTimer = 0;
 var pauseScreen = function() {
     ctx.fillStyle = "rgb(70,70,70)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "rgb(211, 211, 211)";
-    ctx.strokeStyle = "rgb(255, 255, 255)"
+    ctx.fillStyle = "rgb(234, 234, 234)";
+    ctx.strokeStyle = "rgb(0, 0, 0)"
     ctx.lineWidth = h100 / 2;
 
-    ctx.font = 6*h100 + "px Tahoma";
+    ctx.font = 8*h100 + "px pixelFont";
     ctx.textAlign = "center";
     ctx.textBaseline = "hanging";
     ctx.strokeText("Paused!", canvas.width / 2, h100 * 2);
     ctx.fillText  ("Paused!", canvas.width / 2, h100 * 2);
 
     var sadBallDisplay = function([type, level], x, y) {
-        /*ctx.fillStyle = ballTypes[type].col;//fill;
-        ctx.font = 3*h100 + "px cursive";
-        ctx.beginPath();
-        circle(ctx, x, y, h100*3.5);
-        ctx.fill();
-        */
         displayBall(type, x, y, h100*4);
         ctx.fillStyle = "white";
         ctx.strokeStyle = "black";
         ctx.lineWidth = 0.3*h100;
         ctx.textAlign = "center";
-        ctx.font = 3*h100 + "px Tahoma";
+        ctx.font = 3*h100 + "px pixelFont";
         ctx.strokeText("Lv. " + level, x + h100 * 1.5, y - h100 * 3.5);
         ctx.fillText("Lv. " + level, x + h100 * 1.5, y - h100 * 3.5);
     };
     var y = 23*h100;
-    ctx.font = 5*h100 + "px Tahoma";
+    ctx.font = 5*h100 + "px pixelFont";
     ctx.textAlign = "left";
     ctx.fillText("Equip:", 3*h100, 11*h100);
     ctx.fillText("Inventory:", 3*h100, 48*h100-12*h100);
@@ -258,16 +271,20 @@ var equipScreen = function() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     //big title
-    ctx.fillStyle = "rgb(211, 211, 211)";
 
-    ctx.font = 6*h100 + "px cursive";
+    ctx.font = 10*h100 + "px pixelFont";
     ctx.textAlign = "center";
     ctx.textBaseline = "hanging";
-    ctx.fillText  ("EQUIP SCREEN", canvas.width / 2, h100 * 2);
+
+    ctx.fillStyle = "black";
+    ctx.fillText  ("EQUIP!", canvas.width / 2 + h100/5, h100 * 2 + h100/3);
+    ctx.fillStyle = "white";
+    ctx.fillText  ("EQUIP!", canvas.width / 2, h100 * 2);
+    
 
     //equip/inv label
     ctx.fillStyle = "rgb(255,255,255)";
-    ctx.font = 3*h100 + "px cursive";
+    ctx.font = 5*h100 + "px pixelFont";
     ctx.fillText("EQUIP", canvas.width/2, 9*h100);
     ctx.fillText("INVENTORY", canvas.width/2, 34*h100);
 
@@ -355,6 +372,7 @@ var equipScreen = function() {
     }
 
     //next button
+    /*
     var hovered = IsPointInAABB(mouse, {x: h100 * 80, y: 2*h100}, {x: h100 * 18, y: 9*h100});
     ctx.fillStyle = hovered? mouse.pressed? "rgb(180, 180, 0)": "rgb(200, 200, 0)": "rgb(238, 255, 0)";
     ctx.strokeStyle = "black";
@@ -363,10 +381,14 @@ var equipScreen = function() {
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.font = 4*h100 + "px cursive";
+    ctx.font = 4*h100 + "px pixelFont";
     ctx.fillText("To Lv. " + (currLevel+1) + "!", h100 * 89, 7*h100);
-    if(hovered && mouse.justReleased && equip.length > 0) {
+    */
+    
+    equipScreen.button.go();
+    if(equipScreen.button.pressed && equip.length > 0) {
         switchState("playing");
     }
 };
 equipScreen.currDragging = false;
+equipScreen.button = new Button(h100 * 66, 2*h100, h100 * 32, 9*h100, "placeholder", "rgb(173, 185, 4)");
